@@ -40,11 +40,18 @@ var thirdUser = 'don\'t touch this string, either!';
 function noWeakLink() {
 
   return $http({
-    method: 'GET',
-    url: '/api/users'
-  })
-  // CODE HERE...
-
+      method: 'GET',
+      url: '/api/users'
+    })
+    // CODE HERE...
+    .then(function(response) {
+      firstUser = response.data[0];
+      return response;
+    })
+    .then(function(response) {
+      thirdUser = response.data[2];
+      return response.data[9];
+    })
 }
 
 
@@ -69,13 +76,13 @@ function noWeakLink() {
 var elephant = {
   name: 'Horton'
 }
+
 function large() {
 
   return 'My name is ' + this.name + ' and I am very heavy!'
 }
 // CODE HERE...
-
-
+var boundToElephant = large.bind(elephant);
 
 // *************
 // * PROBLEM 3 *
@@ -88,7 +95,9 @@ function large() {
 // and return the bound function.
 
 // CODE HERE...
-
+function deathStar(capacity, crew) {
+  return capacity.bind(crew);
+}
 
 
 // *************
@@ -103,7 +112,11 @@ function large() {
 // The closure function will return the combined value of assets and liabilities.
 
 // CODE HERE...
-
+function accountingOffice(asessts) {
+  return function(liabilites) {
+    return asessts + liabilites;
+  }
+}
 
 
 // *************
@@ -128,7 +141,16 @@ function large() {
 // };
 
 // CODE HERE...
-
+function forgetter(name) {
+  var items = [];
+  return function rememberall(item) {
+    items.push(item);
+    return {
+      name: name,
+      remember: items
+    }
+  }
+}
 
 
 // *************
@@ -156,3 +178,48 @@ function large() {
 // NOTE: Neither hunger nor danger should be able to exceed 100 or drop below 0.
 
 // CODE HERE...
+var frodo = function(startingHungerValue, startingDangerValue) {
+
+  var hunger = startingHungerValue;
+  var danger = startingDangerValue;
+
+  return {
+
+    dinnerOverFire: function() {
+      hunger -= 25;
+      danger += 40;
+      if (hunger > 100) {
+        hunger = 100
+      } else if (hunger < 0) {
+        hunger = 0;
+      }
+      if (danger > 100) {
+        danger = 100;
+      } else if (danger < 0) {
+        danger = 0;
+      }
+      return {
+        hunger,
+        danger
+      }
+    },
+    hidingInBush: function() {
+      hunger += 35;
+      danger -= 20;
+      if (hunger > 100) {
+        hunger = 100
+      } else if (hunger < 0) {
+        hunger = 0;
+      }
+      if (danger > 100) {
+        danger = 100;
+      } else if (danger < 0) {
+        danger = 0;
+      }
+      return {
+        hunger,
+        danger
+      }
+    }
+  }
+}
